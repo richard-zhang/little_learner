@@ -1,0 +1,4 @@
+(executable
+ (public_name little_learner)
+ (name main)
+ (libraries little_learner))
