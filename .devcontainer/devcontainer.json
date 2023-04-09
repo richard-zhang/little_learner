@@ -1,0 +1,26 @@
+// .devcontainer/devcontainer.json
+{
+    "name": "OCaml Development Container",
+    "image": "ocaml/opam:ubuntu-20.04_ocaml-4.14.0",
+    "mounts": [
+      "source=${localWorkspaceFolder}/.opam,target=/home/opam/.opam,type=bind,consistency=cached"
+    ],
+    "postCreateCommand": "opam switch create . ocaml-base-compiler.4.14.0 && opam install -y dune base ppx_sexp_conv ppx_inline_test ppx_assert ppx_expect ocamlformat ocaml-lsp-server && opam clean -a",
+    "remoteUser": "opam",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vscodevim.vim",
+                "ocamllabs.ocaml-platform",
+                "release-candidate.vscode-ocaml-expect-inline"
+            ],
+            "settings": {
+                "terminal.integrated.profiles.linux": {
+                    "zsh": {
+                        "path": "zsh"
+                    }
+                }
+            }
+        }
+    }
+}  
