@@ -98,25 +98,27 @@ let%test "plus 3" =
   let expected = tensor [floats [10.; 12.; 9.]; floats [13.; 13.; 8.]] in
   plus t1 t4 = expected
 
-let rec unary_op r op t =
+let rec reduce r op t =
   let r1 = rank t in
   assert (r <= r1) ;
   if r1 = r then op t
   else
     match t with
     | Tensor t1 ->
-        Tensor (Array.map (unary_op r op) t1)
+        Tensor (Array.map (reduce r op) t1)
     | _ ->
         failwith "must be of tensor"
 
 let sum =
-  unary_op 1 (function
+  reduce 1 (function
     | Scalar _ ->
         failwith "must be tensor"
     | Tensor x ->
         Scalar (Array.fold_left ( +. ) 0. (Array.map get_value x)) )
 
-let%test "sum 1" =
+let%test "sum 1" = sum (floats [1.0; 2.0; 3.0]) |> get_value = 6.0
+
+let%test "sum 2" =
   let t1 = floats [1.; 2.] in
   let t2 = floats [3.; 4.] in
   let t3 = floats [5.; 6.] in
