@@ -14,13 +14,21 @@
   loss = objective_func params
 *)
 
-let l2_loss target (xs, ys) params =
-  let output = List.map (fun x -> target x params) xs in
-  List.fold_left2
-    (fun init x1 x2 ->
-      let diff = (x1 -. x2) *. (x1 -. x2) in
-      init +. diff )
-    0. output ys
+let l2_loss target (xs, expected_ys) params =
+  Tensor.bin_op
+    (fun x y ->
+      let diff = target x params -. y in
+      diff *. diff )
+    xs expected_ys
+  |> Tensor.sum |> Tensor.get_value
+
+let%expect_test "l2_loss" =
+  let target_func = Line.line in
+  let expectant_func = l2_loss target_func in
+  let objective_func = expectant_func (Line.line_xs, Line.line_ys) in
+  let params = [0.0; 0.0] in
+  let loss = objective_func params in
+  Printf.printf "%.2f" loss ; [%expect {| 33.21 |}]
 
 let%expect_test "graident of line at (0.0, 0.0)" =
   let gradient_at_x =
