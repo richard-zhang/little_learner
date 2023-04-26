@@ -24,6 +24,12 @@ While the book is using Racket (a modern dialect of scheme), this repo contains 
   * inflate
   * deflate
   * update
+- [ ] Chapter 8. momentum gradient descent - new velocity is determined by 1. retaining a proportion of previous velocity and 2. gradient
+  * `v_{t+1} = mu * v_{t} - learning rate * graidient`
+- [ ] Ghost in the shell: implement graident operator
+  * reverse mode: **expliclity** construct a chain of primitives (like tapes recrod every step)
+  * link: a function that manages 1) the chain that produced this scalar 2) is invoked for walking the chain
 
 ## TODO
 - [ ] Ghost in the shell: implement graident operator
+- [ ] try out alcotest
